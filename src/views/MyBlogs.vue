@@ -40,17 +40,17 @@
       </div>
     </div>
     <h2>My Blogs</h2>
-    <div class="row">
+    <div class="row equal-height">
       <router-link
         v-for="blog in blogs"
         :key="blog._id"
-        class="col-md-4 mb-4"
+        class="col-md-6 mb-4"
         :to="{ name: 'blog', params: { id: blog._id } }"
       >
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">{{ blog.title }}</h2>
-            <p class="card-text">{{ truncatePost(blog.post) }}</p>
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column justify-content-between flex-fill">
+            <h2 class="card-title">{{ truncatePost(blog.title,50) }}</h2>
+            <p class="card-text">{{ truncatePost(blog.post,300) }}</p>
             <div class="footer">
               <div>
                 <p class="card-text category">{{ blog.category }}</p>
@@ -134,8 +134,8 @@ export default {
     handleEdit(id){
       this.$router.push({ name: 'editblog', params: { id } });
     },
-    truncatePost(post) {
-      const maxLength = 300;
+    truncatePost(post,min) {
+      const maxLength = min;
       if (post.length > maxLength) {
         return post.substring(0, maxLength) + "...";
       }
@@ -170,14 +170,17 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
 .card {
   border-radius: 10px;
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-height: 400px;
-  height: 400px;
 }
+/* .equal-height {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+} */
 .loading {
   font-size: 1.2rem;
   display: flex;
@@ -193,7 +196,7 @@ export default {
   margin-top: 40px;
 }
 .card-title {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 .icon {
   height: 15px;
@@ -229,7 +232,6 @@ export default {
   z-index: 1050; /* Adjust as needed based on other z-index values in your project */
 }
 .footer{
-  position: absolute;
   bottom: 30px;
   display: flex;
   justify-content: space-between;

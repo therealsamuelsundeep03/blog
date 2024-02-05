@@ -69,7 +69,7 @@ h2 {
 .blog p {
   margin: auto;
   margin-top: 40px;
-  text-align: center;
+  text-align: left;
 }
 .blog-head{
     display: flex;

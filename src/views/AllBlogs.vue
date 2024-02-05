@@ -7,13 +7,13 @@
       <router-link
         v-for="blog in blogs"
         :key="blog._id"
-        class="col-md-4 mb-4"
+        class="col-md-6 mb-4"
         :to="{ name: 'blog', params: { id: blog._id } }"
       >
         <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">{{ blog.title }}</h2>
-            <p class="card-text">{{ truncatePost(blog.post) }}</p>
+          <div class="card-body d-flex flex-column justify-content-between flex-fill">
+            <h2 class="card-title">{{ truncatePost(blog.title,50) }}</h2>
+            <p class="card-text">{{ truncatePost(blog.post,300) }}</p>
             <p class="card-text category">{{ blog.category }}</p>
             <p class="card-text">Created by: {{ blog.userName }}</p>
             <p class="card-text">Date: {{ formatCreatedAt(blog.createdAt) }}</p>
@@ -52,8 +52,8 @@ export default {
         this.loading = false;
       }
     },
-    truncatePost(post) {
-      const maxLength = 300;
+    truncatePost(post, min) {
+      const maxLength = min;
       if (post.length > maxLength) {
         return post.substring(0, maxLength) + "...";
       }
@@ -67,7 +67,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 a {
   color: #111;
   text-decoration: none;
@@ -75,8 +75,10 @@ a {
 a:hover{
   color: #111;
 }
+.card-title{
+  font-size: 1.3em;
+}
 .card {
-  max-height: 380px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -87,6 +89,7 @@ a:hover{
   align-items: center;
   height: 100vh;
 }
+
 .all-blog {
   margin: 40px;
 }

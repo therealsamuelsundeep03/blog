@@ -3,6 +3,7 @@
   <div class="login">
     <div class="login-container">
       <h2>Login</h2>
+      <!-- form for login submission -->
       <form @submit.prevent="submitForm">
         <div class="error-message common-error">{{error}}</div>
         <div class="mb-3">
@@ -58,6 +59,7 @@ export default {
     };
   },
   methods: {
+    // to handle the user input
     handleInput(name, value) {
       this.emailError = "";
       this.passwordError = "";
@@ -67,6 +69,7 @@ export default {
         this.password = value;
       }
     },
+    // to validate the user input
     validateInput(name, value) {
       if (name === "email") {
         const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
@@ -77,14 +80,16 @@ export default {
     },
     async submitForm() {
       try {
+        // if no errors or if the fields are not empty then send the form to the backend
         if (!this.email.length) return (this.emailError = "Enter Email");
         if (!this.password.length)
           return (this.passwordError = "Enter password");
-        if (this.emailError === "" && this.passwordError === "") {
+        if (this.emailError === "" && this.passwordError === "" && this.error === "") {
           const { data } = await axios.post("/auth/login", {
             email: this.email,
             password: this.password,
           });
+          // if the user is created then redirect the user to the login page
           if(data.status){
             localStorage.setItem('user',data.id);
             this.$router.push({ name: 'allblogs' });

@@ -129,8 +129,7 @@ export default {
         if (!this.title.length)
           return (this.titleError = "Enter Title");
         if (this.blogError === "" && this.titleError === "") {
-    const blogId = this.$route.params.id;
-    
+          const blogId = this.$route.params.id;
           const { data } = await axios.put(`/blogs/${this.user}/${blogId}`,{
             title: this.title,          
             post:this.blog,

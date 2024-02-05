@@ -4,6 +4,7 @@
     <div class="register-container">
       <h2>Sign In</h2>
       <form @submit.prevent="submitForm">
+        <div class="error-message common-error">{{error}}</div>
         <div class="mb-3">
           <TextField
             label="Name"
@@ -77,6 +78,7 @@ export default {
       email: "",
       password: "",
       nameError: "",
+      error: "",
       confirmPassword: "",
       emailError: "",
       passwordError: "",
@@ -89,6 +91,7 @@ export default {
       this.passwordError = "";
       this.confirmPasswordError = "";
       this.nameError = "";
+      this.error = "";
       if (name === "email") {
         this.email = value;
       } else if(name === "password"){
@@ -123,18 +126,27 @@ export default {
           return (this.confirmPasswordError = "Enter password");
         if (this.emailError === "" && this.passwordError === "" && this.nameError=== "" && this.confirmPasswordError=== "") {
           const { data } = await axios.post("/auth/register", {
+            userName:this.name,
             email: this.email,
             password: this.password,
           });
-          console.log(data);
+          if(data.status){
+            alert('user created')
+            this.$router.push({ name: "login" });
+          }
         }
       } catch (error) {
-        if (error.response.data.message === "user does not exists") {
-          this.emailError = "User does not exists";
-        } else if (error.response.data.message === "Password is incorrect") {
-          this.passwordError = "Password is incorrect";
-        } else if(error.response.data.message === "Password is incorrect"){
-          this.passwordError = "Password is incorrect";
+        console.log(error)
+        if (error.response.data.message === "user exists") {
+          this.emailError = "user exists";
+        } else if (error.response.data.message === "Password is Required") {
+          this.passwordError = "Password is Required";
+        } else if(error.response.data.message === "user exists"){
+          this.emailError = "user exists";
+        } else if(error.response.data.message === "Name is Required"){
+          this.nameError = "Name is Required";
+        }else if(error.response.status === 500 || !error?.response){
+          this.error = "Please try again"
         }
       }
     },
@@ -154,6 +166,7 @@ export default {
   padding: 50px;
   border-radius: 10px;
   min-width: 520px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 .register-container h2 {
   margin-bottom: 30px;
@@ -169,5 +182,10 @@ export default {
   color: red;
   font-size: 0.8rem;
   font-weight: 600;
+}
+.common-error{
+  text-align: center;
+  text-transform: uppercase;
+  margin: 20px
 }
 </style>
