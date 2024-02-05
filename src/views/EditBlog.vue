@@ -3,6 +3,7 @@
   <div v-if="loading" class="loading">Loading...</div>
   <div class="edit-blog">
     <h2>Edit Blog</h2>
+    <!-- form  -->
     <form @submit.prevent="submitForm">
       <div class="row g-2">
         <div class="col-md titleInp">
@@ -59,7 +60,7 @@ export default {
       blog: "",
       category: "",
       id: null,
-      blogId:null,
+      blogId: null,
       titleError: "",
       blogError: "",
       categoryError: "",
@@ -72,20 +73,22 @@ export default {
     this.fetchData();
   },
   methods: {
-     async fetchData() {
+    // fetching data
+    async fetchData() {
       try {
+        // set loading to true
         this.loading = true;
-    const blogId = this.$route.params.id;
-        this.user = localStorage.getItem('user');
-        
+        const blogId = this.$route.params.id;
+        this.user = localStorage.getItem("user");
 
         const { data } = await axios.get(`/blogs/${this.user}/${blogId}`);
-        console.log(data)
+        console.log(data);
+        // if we get the data then store it in the blog
         if (data.status) {
-            this.title = data.blog.title,
-            this.category = data.blog.category,
-            this.blog = data.blog.post,
-            this.id = data.blog._id
+          (this.title = data.blog.title),
+            (this.category = data.blog.category),
+            (this.blog = data.blog.post),
+            (this.id = data.blog._id);
         }
       } catch (error) {
         console.log(error);
@@ -93,6 +96,7 @@ export default {
         this.loading = false;
       }
     },
+    // to handle the input
     handleInput(name, value) {
       this.titleError = "";
       this.blogError = "";
@@ -101,13 +105,11 @@ export default {
         this.blog = value;
       } else if (name === "title") {
         this.title = value;
-      }else if(name === "category"){
+      } else if (name === "category") {
         this.category = value;
       }
     },
-    handleEdit(){
-        this.modal = true
-    },
+    // to validate the input
     validateInput(name, value) {
       if (name === "title") {
         this.titleError = value.length > 0 ? "" : "Enter Title";
@@ -123,27 +125,27 @@ export default {
     },
     async submitForm() {
       try {
-        
         // this.loading = true
-        if (!this.blog.length) return (this.blogError = "Must contain atleast 300 words");
-        if (!this.title.length)
-          return (this.titleError = "Enter Title");
+        if (!this.blog.length)
+          return (this.blogError = "Must contain atleast 300 words");
+        if (!this.title.length) return (this.titleError = "Enter Title");
         if (this.blogError === "" && this.titleError === "") {
           const blogId = this.$route.params.id;
-          const { data } = await axios.put(`/blogs/${this.user}/${blogId}`,{
-            title: this.title,          
-            post:this.blog,
+          const { data } = await axios.put(`/blogs/${this.user}/${blogId}`, {
+            title: this.title,
+            post: this.blog,
             category: this.category,
           });
-    
-          if(data.status){
-            alert('Blog updated to the database');
-            this.title= "";
-            this.blog= "";
+
+          if (data.status) {
+            // if in backend the data is updated then send an alert message
+            alert("Blog updated to the database");
+            this.title = "";
+            this.blog = "";
           }
         }
       } catch (error) {
-        console.log(error)
+        // handling the backend response
         if (error.response.data.message === "Title is Required") {
           this.titleError = "Title is Required";
         } else if (error.response.data.message === "Post is Required") {
@@ -151,12 +153,12 @@ export default {
         } else if (error.response.data.message === "category is Required") {
           this.categoryError = "category is Required";
         } else if (error.response.data.message === "Please login again") {
-          this.login = true
-        }else if (error.response.status = 500 || !error?.response?.message){
-          this.error = "Please try again"
+          this.login = true;
+        } else if ((error.response.status = 500 || !error?.response?.message)) {
+          this.error = "Please try again";
         }
-      }finally{
-        this.loading = false
+      } finally {
+        this.loading = false;
       }
     },
     closeModal() {
@@ -170,8 +172,8 @@ export default {
 .edit-blog {
   margin: 40px;
 }
-h2{
-    text-align: left;
+h2 {
+  text-align: left;
 }
 .row {
   margin-top: 40px;
@@ -179,7 +181,7 @@ h2{
 .titleInp {
   max-width: 300px;
 }
-.selectInp{
+.selectInp {
   max-width: 300px;
   /* margin-left: 40px; */
 }
@@ -187,7 +189,7 @@ h2{
   color: red;
   font-size: 0.8rem;
 }
-.btn{
+.btn {
   margin-top: 30px;
   width: 100px;
 }

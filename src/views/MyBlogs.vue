@@ -2,6 +2,7 @@
   <navbar />
   <div v-if="loading" class="loading">Loading...</div>
   <div v-else class="view-blog">
+    <!-- if delete icon is clicked then this modal will pop up -->
     <div v-if="modal" class="overlay">
       <div
         class="modal fade show"
@@ -40,6 +41,9 @@
       </div>
     </div>
     <h2>My Blogs</h2>
+    <!-- if there are no blogs -->
+    <h3 v-if="!blogs?.length" class="no-blog">No Blogs</h3>
+    <!-- looping trough the blogs -->
     <div class="row equal-height">
       <router-link
         v-for="blog in blogs"
@@ -71,7 +75,7 @@
                     />
                   </svg>
                 </span>
-
+                <!-- when clicked on edit icon then redirect to the view blog page -->
                 <span @click.prevent="handleEdit(blog._id)">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -117,6 +121,7 @@ export default {
     this.fetchData();
   },
   methods: {
+    // getting data from the backend
     async fetchData() {
       try {
         this.user  =localStorage.getItem('user');
@@ -131,6 +136,7 @@ export default {
         this.loading = false;
       }
     },
+    // redirect to the page and pass the blog id
     handleEdit(id){
       this.$router.push({ name: 'editblog', params: { id } });
     },
@@ -145,10 +151,12 @@ export default {
       const date = new Date(createdAt);
       return date.toLocaleString(); // Adjust the format as needed
     },
+    // function to open delete modal
     handleDelete(id) {
       this.modal = true;
       this.id = id;
     },
+    // to delete a blog in the backend
     async deleteBlog() {
       try {
         const { data } = await axios.delete(
@@ -162,6 +170,7 @@ export default {
         console.log(error);
       }
     },
+    // to close the modal
     closeModal() {
       this.id = null;
       this.modal = false;
@@ -249,5 +258,8 @@ export default {
   border-radius: 10px;
   font-size: 0.9rem;
   text-align: center;
+}
+.no-blog{
+  margin-top: 60px;
 }
 </style>

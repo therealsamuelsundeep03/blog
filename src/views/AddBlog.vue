@@ -2,6 +2,7 @@
   <navbar />
   <div class="add-blog">
     <h2>Add Blog</h2>
+    <!-- form for add blog  -->
     <form @submit.prevent="submitForm">
       <div class="row g-2">
         <div class="col-md titleInp">
@@ -67,6 +68,7 @@ export default {
     };
   },
   methods: {
+    // to handle the user input
     handleInput(name, value) {
       this.titleError = "";
       this.blogError = "";
@@ -79,6 +81,7 @@ export default {
         this.category = value;
       }
     },
+    // to validate the input
     validateInput(name, value) {
       if (name === "title") {
         this.titleError = value.length > 0 ? "" : "Enter Title";
@@ -99,8 +102,8 @@ export default {
           return (this.blogError = "Must contain atleast 300 words");
         if (!this.title.length) return (this.titleError = "Enter Title");
         if (this.blogError === "" && this.titleError === "") {
+          // get user from the localstorage to store the data in the backend
           let user = localStorage.getItem("user");
-
           const data = await axios.post("/blogs", {
             title: this.title,
             post: this.blog,
@@ -114,7 +117,7 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error.response.data.message);
+        // handling error responses from the backend
         if (error.response.data.message === "Title is Required") {
           this.titleError = "Title is Required";
         } else if (error.response.data.message === "Post is Required") {

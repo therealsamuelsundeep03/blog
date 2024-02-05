@@ -3,6 +3,7 @@
   <div class="register">
     <div class="register-container">
       <h2>Sign In</h2>
+      <!-- signin form -->
       <form @submit.prevent="submitForm">
         <div class="error-message common-error">{{error}}</div>
         <div class="mb-3">
@@ -86,6 +87,7 @@ export default {
     };
   },
   methods: {
+    // to handle the user input
     handleInput(name, value) {
       this.emailError = "";
       this.passwordError = "";
@@ -102,6 +104,7 @@ export default {
         this.confirmPassword = value;
       }
     },
+    // to handle the validate input
     validateInput(name, value) {
       if(name === "name"){
         this.nameError = value.length > 0 ? "" : "Enter Name";
@@ -117,6 +120,7 @@ export default {
     },
     async submitForm() {
       try {
+        // if there are no errors then send an error message
         if (!this.name.length)
           return (this.nameError = "Enter Name");
         if (!this.email.length) return (this.emailError = "Enter Email");
@@ -130,13 +134,14 @@ export default {
             email: this.email,
             password: this.password,
           });
+          // if the user is created then send an alert message
           if(data.status){
             alert('user created')
             this.$router.push({ name: "login" });
           }
         }
       } catch (error) {
-        console.log(error)
+        // handling error from the backend
         if (error.response.data.message === "user exists") {
           this.emailError = "user exists";
         } else if (error.response.data.message === "Password is Required") {

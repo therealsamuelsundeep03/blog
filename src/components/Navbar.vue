@@ -1,7 +1,8 @@
 <template>
   <nav class="navContainer">
-    <div class="title">MEDIUM</div>
+    <router-link to="/add-blog" class="title">MEDIUM</router-link>
     <div v-if="user" class="nav-link">
+      <!-- navigations -->
       <router-link to="/">Blogs</router-link>
       <router-link to="/my-blogs">My Blogs</router-link>
       <router-link to="/add-blog">Add Blog</router-link>
@@ -19,10 +20,12 @@ export default {
     };
   },
   methods: {
+    // if there is user then navigate to the page pr else navigate to the login page
     isLoggedIn() {
       this.user = localStorage.getItem("user")?.length > 0 ? true : false;
       !this.user && this.$router.push({ name: "login" });
     },
+    // remove the user from the logout page
     logout(){
       localStorage.removeItem('user');
       this.$router.push({ name: "login" });

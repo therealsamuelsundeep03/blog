@@ -1,15 +1,18 @@
 <template>
   <navbar />
+  <!-- if on fetching show the loading -->
   <div v-if="loading" class="loading">Loading...</div>
   <div v-else class="all-blog">
     <h2>All Blogs</h2>
     <div class="row">
+      <!-- loop trough the blog array and redirect to blog page when clicked -->
       <router-link
         v-for="blog in blogs"
         :key="blog._id"
         class="col-md-6 mb-4"
         :to="{ name: 'blog', params: { id: blog._id } }"
       >
+        <!-- styled card using bootstrap -->
         <div class="card">
           <div class="card-body d-flex flex-column justify-content-between flex-fill">
             <h2 class="card-title">{{ truncatePost(blog.title,50) }}</h2>
@@ -37,6 +40,7 @@ export default {
     };
   },
   mounted() {
+    // fetching data
     this.fetchData();
   },
   methods: {
@@ -52,6 +56,7 @@ export default {
         this.loading = false;
       }
     },
+    // to trim the post and title so that i can maintain the card height same
     truncatePost(post, min) {
       const maxLength = min;
       if (post.length > maxLength) {
@@ -59,6 +64,7 @@ export default {
       }
       return post;
     },
+    // converting date format
     formatCreatedAt(createdAt) {
       const date = new Date(createdAt);
       return date.toLocaleString(); 

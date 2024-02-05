@@ -1,5 +1,6 @@
 <template>
   <navbar />
+  <!-- page to view the blog content -->
   <div v-if="loading" class="loading">Loading...</div>
   <div v-else class="blog">
     <div class="blog-head">
@@ -29,12 +30,13 @@ export default {
     };
   },
   mounted() {
+    // fetching the data from the backend
     this.fetchData();
-    console.log(this.blog);
   },
   methods: {
     async fetchData() {
       try {
+        // get id from the all blog or my blog and fetch the blog from the backend
         const blogId = this.$route.params.id;
         let user = localStorage.getItem('user');
         const { data } = await axios.get(
