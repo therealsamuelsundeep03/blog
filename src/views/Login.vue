@@ -30,7 +30,7 @@
           />
           <span class="error-message">{{ passwordError }}</span>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" :disabled = "loading">Submit</button>
       </form>
       <hr />
       <div class="register-link">
@@ -56,6 +56,7 @@ export default {
       password: "",
       emailError: "",
       passwordError: "",
+      loading: false
     };
   },
   methods: {
@@ -80,6 +81,7 @@ export default {
     },
     async submitForm() {
       try {
+        this.loading = true;
         // if no errors or if the fields are not empty then send the form to the backend
         if (!this.email.length) return (this.emailError = "Enter Email");
         if (!this.password.length)
@@ -92,7 +94,7 @@ export default {
           // if the user is created then redirect the user to the login page
           if(data.status){
             localStorage.setItem('user',data.id);
-            this.$router.push({ name: 'allblogs' });
+            this.$router.push({ path: '/' });
           }
         }
       } catch (error) {
@@ -107,6 +109,9 @@ export default {
         }else if (error.response.status = 500 || !error.response.message){
           this.error = "Please try again"
         }
+      }
+      finally{
+        this.loading = false;
       }
     },
   },

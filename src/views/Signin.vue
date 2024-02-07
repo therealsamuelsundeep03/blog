@@ -40,7 +40,7 @@
             @update:modelValue="handleInput"
             @validate="validateInput"
           />
-          <span class="error-message">{{ passwordError }}</span>
+          <span class="error-message passError">{{ passwordError }}</span>
         </div>
         <div class="mb-3">
          <TextField
@@ -54,7 +54,7 @@
           />
           <span class="error-message">{{ confirmPasswordError }}</span>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" :disabled="loading">Submit</button>
       </form>
       <hr />
       <div class="login-link">
@@ -83,7 +83,8 @@ export default {
       confirmPassword: "",
       emailError: "",
       passwordError: "",
-      confirmPasswordError: ""
+      confirmPasswordError: "",
+      loading: false
     };
   },
   methods: {
@@ -113,13 +114,15 @@ export default {
         const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
         this.emailError = regex.test(value) ? "" : "Enter valid Email";
       } else if (name === "password") {
-        this.passwordError = value.length > 0 ? "" : "Enter password";
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-_]).{8,}$/;
+        this.passwordError = regex.test(value) ? "" : "Password must have capital,small,number,special character and atleat 8 letters";
       }else if(name === "confirmPassword"){
         this.confirmPasswordError = this.password === this.confirmPassword ? "": "Password does not match";
       }
     },
     async submitForm() {
       try {
+        this.loading = true;
         // if there are no errors then send an error message
         if (!this.name.length)
           return (this.nameError = "Enter Name");
@@ -129,18 +132,19 @@ export default {
         if (!this.confirmPassword.length)
           return (this.confirmPasswordError = "Enter password");
         if (this.emailError === "" && this.passwordError === "" && this.nameError=== "" && this.confirmPasswordError=== "") {
-          const { data } = await axios.post("/auth/register", {
+           const { data } = await axios.post("/auth/register", {
             userName:this.name,
             email: this.email,
             password: this.password,
           });
           // if the user is created then send an alert message
-          if(data.status){
-            alert('user created')
-            this.$router.push({ name: "login" });
+          if(data?.status){
+            this.$router.push({ name: "checkmail" });;
+            this.loading = false;
           }
         }
       } catch (error) {
+        console.log(error);
         // handling error from the backend
         if (error.response.data.message === "user exists") {
           this.emailError = "user exists";
@@ -153,6 +157,9 @@ export default {
         }else if(error.response.status === 500 || !error?.response){
           this.error = "Please try again"
         }
+      }
+      finally{
+        this.loading = false;
       }
     },
   },
@@ -184,9 +191,9 @@ export default {
   font-size: 0.8rem;
 }
 .error-message {
+  display: block;
   color: red;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.9rem;
 }
 .common-error{
   text-align: center;

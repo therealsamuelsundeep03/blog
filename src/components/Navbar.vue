@@ -23,7 +23,7 @@ export default {
     // if there is user then navigate to the page pr else navigate to the login page
     isLoggedIn() {
       this.user = localStorage.getItem("user")?.length > 0 ? true : false;
-      !this.user && this.$router.push({ name: "login" });
+      // !this.user && this.$router.push({ name: "login" });
     },
     // remove the user from the logout page
     logout(){

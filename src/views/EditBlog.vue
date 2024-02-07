@@ -38,7 +38,7 @@
         />
         <span class="error-message">{{ blogError }}</span>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary" :disabled = "loading">Submit</button>
     </form>
   </div>
 </template>
@@ -67,6 +67,7 @@ export default {
       loading: false,
       login: false,
       error: "",
+      loading: false
     };
   },
   mounted() {
