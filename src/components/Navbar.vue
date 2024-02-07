@@ -1,6 +1,6 @@
 <template>
   <nav class="navContainer">
-    <router-link to="/add-blog" class="title">MEDIUM</router-link>
+    <router-link to="/" class="title">MEDIUM</router-link>
     <div v-if="user" class="nav-link">
       <!-- navigations -->
       <router-link to="/">Blogs</router-link>

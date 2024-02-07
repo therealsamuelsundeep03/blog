@@ -20,7 +20,6 @@ export default {
     modelValue: {
       type: String || Null,
       required: true,
-      default: "Development"
     },
     label: {
       type: String,
@@ -35,7 +34,7 @@ export default {
       this.$emit("update:modelValue", this.name, event.target.value);
     },
     validateInput() {
-      this.$emit("validate", this.name, this.modelValue);
+      this.$emit("validate",   this.name, this.modelValue);
     },
   },
 };

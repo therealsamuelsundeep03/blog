@@ -81,14 +81,15 @@ export default {
         const blogId = this.$route.params.id;
         this.user = localStorage.getItem("user");
 
-        const { data } = await axios.get(`/blogs/${this.user}/${blogId}`);
+        const { data } = await axios.get(`/blogs/blog/${blogId}`);
         console.log(data);
         // if we get the data then store it in the blog
         if (data.status) {
-          (this.title = data.blog.title),
-            (this.category = data.blog.category),
-            (this.blog = data.blog.post),
-            (this.id = data.blog._id);
+            this.title = data.blog.title;
+            this.category = data.blog.category;
+            this.blog = data.blog.post;
+            this.id = data.blog._id;
+            console.log(this.category);
         }
       } catch (error) {
         console.log(error);

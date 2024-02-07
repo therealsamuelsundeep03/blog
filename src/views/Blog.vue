@@ -40,10 +40,12 @@ export default {
         const blogId = this.$route.params.id;
         let user = localStorage.getItem('user');
         const { data } = await axios.get(
-          `/blogs/${user}/${blogId}`
+          `/blogs/blog/${blogId}`
         );
         if (data.status) {
+          console.log(data.blog)
           this.blog = data.blog;
+          console.log(this.blog)
         }
       } catch (error) {
         console.log(error);

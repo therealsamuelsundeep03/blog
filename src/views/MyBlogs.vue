@@ -100,11 +100,10 @@
 <script>
 import axios from "../api/axios";
 import Navbar from "@/components/Navbar.vue";
-import Modal from "@/components/Modal.vue";
 
 export default {
   name: "myblogs",
-  components: { Navbar, Modal },
+  components: { Navbar },
   data() {
     return {
       blogs: null,
