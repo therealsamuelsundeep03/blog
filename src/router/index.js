@@ -61,8 +61,8 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = store.getters.isAuthenticated;
   if (to.name !== 'login' && to.name !== 'signin' && to.name !== 'checkmail' && !isAuthenticated) {
     next({ name: 'login' });
-  } else {
-    next();
+  } else if(to.name === 'login' && to.name === 'signin' && to.name === 'checkmail' && isAuthenticated) {
+    next({path: '/'});
   }
 });
 
