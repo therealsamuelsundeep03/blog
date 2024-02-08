@@ -95,6 +95,7 @@ export default {
           if(data.status){
             localStorage.setItem('user',data.id);
             this.$router.push({ path: '/' });
+            
           }
         }
       } catch (error) {

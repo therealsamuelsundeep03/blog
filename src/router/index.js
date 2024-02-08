@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { store } from '@/store';
 import Login from '../views/Login.vue';
 import Signin from '../views/Signin.vue';
 import AddBlog from '../views/AddBlog.vue';
@@ -58,8 +57,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = store.getters.isAuthenticated;
-  if (to.name !== 'login' && to.name !== 'signin' && to.name !== 'checkmail' && !isAuthenticated) {
+  const isAuthenticated = localStorage.getItem('user') ? true : false;
+  const isLoginPage = to.name === 'login' || to.name === 'signin' || to.name === 'checkmail';
+  if (isAuthenticated && isLoginPage) {
+    next({ name: 'allblogs' });
+  } else if (!isAuthenticated && !isLoginPage) {
     next({ name: 'login' });
   } else {
     next();

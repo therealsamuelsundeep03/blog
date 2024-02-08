@@ -106,7 +106,7 @@ export default {
           let user = localStorage.getItem("user");
           const data = await axios.post("/blogs", {
             title: this.title,
-            post: this.blog,
+            post: this.blog.replace(/\n/g, " \n\n "),
             category: this.category,
             user,
           });

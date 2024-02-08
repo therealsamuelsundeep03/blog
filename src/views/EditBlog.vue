@@ -73,6 +73,11 @@ export default {
   mounted() {
     this.fetchData();
   },
+  computed: {
+     formattedPost() {
+        return this.blog.replace(/\n/g, '<br />');
+      }
+  },
   methods: {
     // fetching data
     async fetchData() {

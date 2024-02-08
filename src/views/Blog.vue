@@ -5,12 +5,14 @@
   <div v-else class="blog">
     <div class="blog-head">
       <h2>{{ blog.title }}</h2>
+      <h6>{{blog.category}}</h6>
       <div>
-        <p>By: {{ blog.username }}</p>
+        <p>By: {{ username }}</p>
         <p>Date: {{ formatCreatedAt(blog.createdAt) }}</p>
       </div>
     </div>
-    <p>{{ blog.post }}</p>
+
+    <div v-html="formattedPost" class="post"></div>
   </div>
 </template>
 
@@ -33,19 +35,24 @@ export default {
     // fetching the data from the backend
     this.fetchData();
   },
+  computed: {
+     formattedPost() {
+        console.log(this.blog.post.includes('\n'))
+        return this.blog.post.replace(/\n/g, '<br />');
+    }
+  },
   methods: {
     async fetchData() {
       try {
         // get id from the all blog or my blog and fetch the blog from the backend
         const blogId = this.$route.params.id;
-        let user = localStorage.getItem('user');
         const { data } = await axios.get(
           `/blogs/blog/${blogId}`
         );
         if (data.status) {
-          console.log(data.blog)
           this.blog = data.blog;
-          console.log(this.blog)
+          this.blog.post.replace(/\n\n/g, '<br><br>');
+          this.username = data.username;
         }
       } catch (error) {
         console.log(error);
@@ -73,14 +80,13 @@ h2 {
 .blog p {
   margin: auto;
   margin-top: 40px;
-  text-align: left;
-}
-.blog-head{
-    display: flex;
-    justify-content: space-between;
+  text-align: justify;
 }
 .blog-head > div > p{
      margin: 10px;
      text-align: right;
+}
+.post{
+  margin-top: 40px;
 }
 </style>

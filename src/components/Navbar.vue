@@ -20,15 +20,13 @@ export default {
     };
   },
   methods: {
-    // if there is user then navigate to the page pr else navigate to the login page
+    // for the following pages there should not be any nav links.
     isLoggedIn() {
-      this.user = localStorage.getItem("user")?.length > 0 ? true : false;
-      // !this.user && this.$router.push({ name: "login" });
+      this.user  = localStorage.getItem('user') ? true : false;
     },
-    // remove the user from the logout page
     logout(){
+      this.$router.push({path: '/login'});
       localStorage.removeItem('user');
-      this.$router.push({ name: "login" });
     }
   },
   mounted() {
